@@ -23,7 +23,11 @@ $(LIBRARY): $(LIBRARY_OBJS) $(DEPS_LIST)
 	@mkdir -p $(@D)
 	$(ARV) cr $(LIBRARY) $(LIBRARY_OBJS)
 
-$(BUILD_DIR)/sample%: $(BUILD_DIR)/samples/sample%.o $(LIBRARY) $(DEPS_LIST)
+$(LIBRARY_SHARED): $(LIBRARY_OBJS) $(DEPS_LIST)
+	@mkdir -p $(@D)
+	$(CXXLDV) -shared -o $(LIBRARY_SHARED) $(LIBRARY_OBJS)
+
+$(BUILD_DIR)/sample%: $(BUILD_DIR)/samples/sample%.o $(LIBRARY) $(LIBRARY_SHARED) $(DEPS_LIST)
 	@mkdir -p $(@D)
 	$(CXXLDV) -o $@ $< $(LINKER_FLAGS)
 

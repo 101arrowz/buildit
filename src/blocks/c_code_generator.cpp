@@ -232,16 +232,28 @@ void c_code_generator::visit(int_const::Ptr a) {
 }
 void c_code_generator::visit(double_const::Ptr a) {
 	oss << std::setprecision(15);
-	oss << a->value;
-	if (floor(a->value) == a->value)
-		oss << ".0";
+	if (std::isinf(a->value)) {
+		oss << ((a->value < 0) ? "(-1.0 / 0.0)" : "(1.0 / 0.0)");
+	} else if (std::isnan(a->value)) {
+		oss << "(0.0 / 0.0)";
+	} else {
+		oss << a->value;
+		if (floor(a->value) == a->value)
+			oss << ".0";
+	}
 }
 void c_code_generator::visit(float_const::Ptr a) {
 	oss << std::setprecision(15);
-	oss << a->value;
-	if (floor(a->value) == a->value)
-		oss << ".0";
-	oss << "f";
+	if (std::isinf(a->value)) {
+		oss << ((a->value < 0) ? "(-1.0f / 0.0f)" : "(1.0f / 0.0f)");
+	} else if (std::isnan(a->value)) {
+		oss << "(0.0f / 0.0f)";
+	} else {
+		oss << a->value;
+		if (floor(a->value) == a->value)
+			oss << ".0";
+		oss << "f";
+	}
 }
 static std::string escapeString(const std::string& input) {
     std::string output;

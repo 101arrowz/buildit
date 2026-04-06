@@ -65,7 +65,10 @@ struct extract_signature_impl<std::tuple<ProcessedArgTypes...>, std::tuple<NextA
 		auto var = std::make_shared<block::var>();	
 		var->var_name = arg_name;
 		var->var_type = dyn_var<NextArg>::create_block_type();
-		var->var_type->static_offset = var->static_offset = tracer::get_unique_tag();
+		var->static_offset = tracer::get_unique_tag();
+		if (var->var_type) {
+			var->var_type->static_offset = var->static_offset;
+		}
 		i_state->generated_func_decl->args.push_back(var);
 		// We explain below by with_block_var is wrapped in a tuple
 		extract_signature_impl<std::tuple<ProcessedArgTypes..., std::tuple<with_block_var>>, std::tuple<RemainingArgTypes...>, ReturnType>::fill_invocation(i_state, func, arg_index + 1, std::forward<ProcessedArgTypes>(processed_args)..., std::tuple<with_block_var>(with_block_var(var)), std::forward<OtherParams>(other_params)...);

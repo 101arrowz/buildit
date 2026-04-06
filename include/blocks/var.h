@@ -1,5 +1,5 @@
-#ifndef VAR_H
-#define VAR_H
+#ifndef BLOCKS_VAR_H
+#define BLOCKS_VAR_H
 
 #include "blocks/block.h"
 #include "util/printer.h"
